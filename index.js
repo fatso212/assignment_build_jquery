@@ -67,44 +67,65 @@ function hasClass(arg, match){
 	return arg.className === match;
 }
 
-function addClass(arg, match){
-	arg.className = match;
-	console.log(hasClass(arg, match));
-}
+
 
 function matchClass(arg){
 	return arg.classList;
 }
 
-function $(arg){
 
-	if (typeof arg !== "string"){
-		return arg;
-	} else {
-	var name = arg.slice(1, arg.length);
-	var selector;
-	switch(arg[0]){
-	case "#":
-		return document.getElementById(name);
-	break;
+function Jquery(){
+	this.arg = "";
+    this.doc = function(arg){
+    	var selector;
+		if (typeof arg !== "string"){
+			this.arg = arg;
+		} else {
+		var name = arg.slice(1, arg.length);
+		switch(arg[0]){
+		case "#":
+			this.arg =  document.getElementById(name);
+		break;
 
-	case ".":
-		return  document.getElementsByClassName(name);
-	break;
+		case ".":
+			this.arg = document.getElementsByClassName(name);
+		break;
 
-	default:
-		return document.getElementsByTagName(arg);
-	break;
-  }
- }
+		default:
+			this.arg = document.getElementsByTagName(arg);
+		break;
+  		}
+ 	  }
+ 	  return this;
+ 	};
+
+ 	this.html = function(text){
+		this.arg.innerHTML = text;
+		return this;
+	};
+
+	this.addClass = function(match){
+		this.arg.className = match;
+		return this;
+	}
+	this.css = function(attr, val){
+		this.arg.style[attr] = val;
+		return this;
+	};
+
+
 }
+var $ =  new Jquery();
+$.doc("#hello")
+	.html("Ccrv");
+
+$.doc("#hello")
+	.addClass("class2")
+	.html("ajrnvqerv")
+	.css("background", "black");
+
 
 //var mine = new SimpleObject();
-style.html($(".goodbye")[0], "what the heck");
-style.css($(".goodbye")[0], "border", "1px solid black");
-style.css($(".goodbye")[1], "color", "orange");
-style.css($(".goodbye")[2], "color", "red");
-style.css($(".goodbye")[3], "color", "blue");
 
 
 /*
