@@ -32,19 +32,6 @@ function Bar(name, address){
 	return {name: name, address: address};
 }
 */
-
- function Styles() {
-	this.html = (el, arg) => {
-		el.innerHTML = arg;
-	};
-
-	this.css = (element, attr, val) => {
-		element.style[attr] = val;
-	};
-}
-
-var style =  new Styles();
-
 function SimpleObject(collection, each){
 	this.collection = collection;
 	this.each = function(func){
@@ -73,8 +60,81 @@ function matchClass(arg){
 	return arg.classList;
 }
 
+var Jquery = function(){
+	var collection = [];
+	var arg = "";
+    var doc = function(arg){
+		if (typeof arg !== "string"){
+			this.arg = arg;
+		} else {
+		var name = arg.slice(1, arg.length);
+		switch(arg[0]){
+		case "#":
+			this.arg =  document.getElementById(name);
+		break;
 
+		case ".":
+			this.arg = document.getElementsByClassName(name);
+		break;
+
+		default:
+			this.arg = document.getElementsByTagName(arg);
+		break;
+  		}
+ 	  }
+ 	  return this;
+ 	};
+
+ 	var html = function(text){
+		arg.innerHTML = text;
+		return this;
+	};
+
+	var addClass = function(match){
+		this.arg.className = match;
+		return this;
+	}
+	var css = function(attr, val){
+		this.arg.style[attr] = val;
+		return this;
+	};
+
+	var loop = function(){
+		var i = 0;
+		while(i < arg.length){
+			collection += this.idx[i];
+		}
+		return this;
+	}
+
+	var idx = function(index){
+		arg = arg[index];
+		return this;
+	}
+
+	var each = function(func){
+		let i = 0;
+			while(i < collection.length){
+			(func)(collection[i], i);
+		i += 1;
+   	  }
+   }
+   return {doc: doc, html: html, addClass: addClass, 
+   		   css: css, loop: loop, idx: idx, each: each};
+}
+
+
+var $ = Jquery();
+$.doc("#hello")
+	.idx(0)
+	.css("background", "black")
+	.css("color", "red")
+	.css("border-radius", "10px")
+	.css("padding", "10px");
+
+/*
 function Jquery(){
+	this.collection = [];
 	this.arg = "";
     this.doc = function(arg){
     	var selector;
@@ -113,17 +173,41 @@ function Jquery(){
 		return this;
 	};
 
+	this.loop = function(){
+		var i = 0;
+		while(i < this.arg.length){
+			this.collection += this.idx[i];
+		}
+		return this;
+	}
 
+	this.idx = function(index){
+		this.arg = this.arg[index];
+		return this;
+	}
+
+	this.each = function(func){
+		let i = 0;
+			while(i < this.collection.length){
+			(func)(this.collection[i], i);
+		i += 1;
+   	  }
+   }
 }
+
+
 var $ =  new Jquery();
 $.doc("#hello")
 	.html("Ccrv");
 
-$.doc("#hello")
-	.addClass("class2")
-	.html("ajrnvqerv")
-	.css("background", "black");
+console.log($.doc(".goodbye")
+	.idx(0)
+	.addClass("fre")
+	.css("background", "black"));
 
+	console.log($.doc(".goodbye").idx(1));
+
+*/
 
 //var mine = new SimpleObject();
 
